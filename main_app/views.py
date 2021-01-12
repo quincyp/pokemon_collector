@@ -8,3 +8,6 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
+
+def pokemon_index(request):
+    return render(request, 'pokemon/index.html')
