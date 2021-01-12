@@ -27,3 +27,20 @@ def pokemons_detail(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
     context = {'pokemon': pokemon}
     return render(request, 'pokemon/detail.html', context)
+
+def pokemon_edit(request, pokemon_id):
+    pokemon = Pokemon.objects.get(id=pokemon_id)
+
+    if request.method == 'POST':
+        pokemon_form = Pokemon_Form(request.POST, instance=pokemon)
+        if pokemon_form.is_valid:
+            pokemon_form.save()
+            return redirect('pokemons_detail', pokemon_id = pokemon.id)
+
+    pokemon_form = Pokemon_Form(instance=pokemon)
+    context = {'pokemon': pokemon, 'pokemon_form': pokemon_form}
+    return render(request, 'pokemon/edit.html', context)
+
+def pokemon_delete(request, pokemon_id):
+    Pokemon.objects.get(id=pokemon_id).delete()
+    return redirect('pokemon_index')

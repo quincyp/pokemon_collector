@@ -5,10 +5,16 @@
     <h1>Pokemon Detail</h1>
     <div class="card">
         <div class="card-content">
-        <span class="card-title">{{ pokemon.name }}</span>
-        <p>Level: {{ pokemon.level }}</p>
-        <p>Type: {{ pokemon.type }}</p>
-        <p>Description: {{ pokemon.description }}</p>
+            <span class="card-title">{{ pokemon.name }}</span>
+            <p>Level: {{ pokemon.level }}</p>
+            <p>Type: {{ pokemon.type }}</p>
+            <p>Description: {{ pokemon.description }}</p>
+        </div>
+
+        <div class="card-action">
+            <a href="{% url 'pokemon_edit' pokemon.id %}" class="btn blue">Edit</a>
+            <a href="{% url 'pokemon_delete' pokemon.id %}" class="btn red">Delete</a>
+        </div>
     </div>
 </div>
 {% endblock %}
