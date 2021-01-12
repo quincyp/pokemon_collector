@@ -4,21 +4,31 @@
 
 <h1>Pokemon List</h1>
 <div class="row">
+
     {% comment %} Cards {% endcomment %}
     <div class="col s9">
         {% for pokemon in pokemons %}
         <div class="card">
-            <a href="{% url 'pokemons_detail' pokemon_id=pokemon.id %}"> 
-            <div class="card-content">
-                <span class="card-title">{{ pokemon.name }}</span>
-                <p>Level: {{ pokemon.level }}</p>
-                <p>Type: {{ pokemon.type }}</p>
-                <p>Description: {{ pokemon.description }}</p>
-            </div>
+            <a href="{% url 'pokemons_detail' pokemon_id=pokemon.id %}">
+                <div class="card-content">
+                    <span class="card-title">{{ pokemon.name }}</span>
+                    <p>Level: {{ pokemon.level }}</p>
+                    <p>Type: {{ pokemon.type }}</p>
+                    <p>Description: {{ pokemon.description }}</p>
+                </div>
             </a>
         </div>
         {% endfor %}
-</div>
+    </div>
+
+    {% comment %} Add Form {% endcomment %}
+    <div class="col s3">
+        <form action="{% url 'pokemon_index' %}" method="POST">
+            {% csrf_token %}
+            {{ pokemon_form.as_p }}
+            <input class="btn" type="submit" value="Add Pokemon" />
+        </form>
+    </div>
 </div>
 
 {% endblock %}
