@@ -14,3 +14,8 @@ def pokemon_index(request):
     pokemons = Pokemon.objects.all()
     context = {'pokemons': pokemons}
     return render(request, 'pokemon/index.html', context)
+
+def pokemons_detail(request, pokemon_id):
+    pokemon = Pokemon.objects.get(id=pokemon_id)
+    context = {'pokemon': pokemon}
+    return render(request, 'pokemon/detail.html', context)
