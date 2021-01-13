@@ -31,10 +31,11 @@ def pokemon_index(request):
     pokemons = Pokemon.objects.all()
     pokemon_img = {}
     for pokemon in pokemons:
+        # url = pb.pokemon(pokemon.name.lower())
+        # response = requests.get(url)
+        # if response.status_code == 200:
         url = pb.pokemon(pokemon.name.lower()).sprites.other.dream_world.front_default
-        response = requests.get(url)
-        if response.status_code == 200:
-            pokemon_img[pokemon.name] = url
+        pokemon_img[pokemon.name] = url
         
 
 
