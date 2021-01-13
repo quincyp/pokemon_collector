@@ -8,4 +8,5 @@ urlpatterns = [
     path('pokemon/<int:pokemon_id>/', views.pokemons_detail, name='pokemons_detail'),
     path('pokemon/<int:pokemon_id>/edit', views.pokemon_edit, name='pokemon_edit'),
     path('pokemon/<int:pokemon_id>/delete', views.pokemon_delete, name='pokemon_delete'),
+    path('accounts/signup', views.signup, name='signup'),
 ]

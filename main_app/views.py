@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template.defaulttags import register
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 from .models import Pokemon
 from .forms import Pokemon_Form
 
 import pokebase as pb
 import requests
+
+from pokebase import cache
+cache.API_CACHE
 
 # Create your views here.
 
@@ -20,15 +26,35 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+# ==== Signup Route ====
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('pokemon_index')
+        else:
+            error_message = 'Invalid sign up - try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html')
+
+@login_required
 def pokemon_index(request):
     if request.method == 'POST':
         pokemon_form = Pokemon_Form(request.POST)
         if pokemon_form.is_valid():
+            pokemon_form.save(commit=False)
+            pokemon_form.user = request.user
             pokemon_form.save()
             return redirect('pokemon_index')
     # charmander = pb.pokemon('charmander')
 
     pokemons = Pokemon.objects.all()
+    # filter to only users's pokemon instead of all in db
+    # pokemons = Pokemon.object.filter(user=request.user) 
     pokemon_img = {}
     for pokemon in pokemons:
         # url = pb.pokemon(pokemon.name.lower())
