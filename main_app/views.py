@@ -1,10 +1,19 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.template.defaulttags import register
 
 from .models import Pokemon
 from .forms import Pokemon_Form
 
+import pokebase as pb
+import requests
+
 # Create your views here.
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
 def home(request):
     return HttpResponse('Pokemon Test, working')
 
@@ -17,10 +26,20 @@ def pokemon_index(request):
         if pokemon_form.is_valid():
             pokemon_form.save()
             return redirect('pokemon_index')
+    # charmander = pb.pokemon('charmander')
 
     pokemons = Pokemon.objects.all()
+    pokemon_img = {}
+    for pokemon in pokemons:
+        url = pb.pokemon(pokemon.name.lower()).sprites.other.dream_world.front_default
+        response = requests.get(url)
+        if response.status_code == 200:
+            pokemon_img[pokemon.name] = url
+        
+
+
     pokemon_form = Pokemon_Form()
-    context = {'pokemons': pokemons, 'pokemon_form': pokemon_form}
+    context = {'pokemons': pokemons, 'pokemon_form': pokemon_form, 'pokemon_img': pokemon_img }
     return render(request, 'pokemon/index.html', context)
 
 def pokemons_detail(request, pokemon_id):
