@@ -82,7 +82,21 @@ def pokemon_index(request):
 
 def pokemons_detail(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
-    context = {'pokemon': pokemon}
+    # REVIEW: pokemon_img code here, create own def? as is used in both details and index?
+    pokemon_img = {}
+    base_url = 'http://pokeapi.co/api/v1/pokemon/'
+    check_url = base_url + pokemon.name.lower()
+    response = requests.get(check_url)
+    # Checks if URL status is good to assign img url, if bad then default pokeball img url
+    if response.status_code == 200:
+        data = json.loads(response.text)
+        print(data['name'])
+        url = pb.pokemon(pokemon.name.lower()).sprites.other.dream_world.front_default
+    else:
+        print('An error occured querying the API')
+        url = 'https://i.pinimg.com/originals/2b/46/73/2b4673e318ab94da17bbf9eaad5b80d6.png' # previously'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
+    pokemon_img[pokemon.name] = url
+    context = {'pokemon': pokemon, 'pokemon_img': pokemon_img}
     return render(request, 'pokemon/detail.html', context)
 
 def pokemon_edit(request, pokemon_id):

@@ -6,6 +6,7 @@
     <div class="card">
         <div class="card-content">
             <span class="card-title">{{ pokemon.name }}</span>
+            <img src="{{ pokemon_img|get_item:pokemon.name }}" alt="pokemon.name" width=90px />
             <p>Level: {{ pokemon.level }}</p>
             <p>Type: {{ pokemon.type }}</p>
             <p>Description: {{ pokemon.description }}</p>

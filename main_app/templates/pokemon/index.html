@@ -11,10 +11,8 @@
         <div class="card">
             <a href="{% url 'pokemons_detail' pokemon_id=pokemon.id %}">
                 <div class="card-content">
-                    <span class="card-title">{{ pokemon.name }}</span>
-                    {% comment %} <%if hasattr(a, 'property'):%> {% endcomment %}
-                    {% comment %} similar to {{ pokemon_img.pokemon.name }} but dictionary access does not support dot notation variable, custom function made {% endcomment %}
-                    <img src="{{ pokemon_img|get_item:pokemon.name }}" alt="pokemon.name" width=100px />
+                    <span class="card-title">{{ pokemon.name }}</span>                    
+                    <img src="{{ pokemon_img|get_item:pokemon.name }}" alt="pokemon.name" width=90px />
                     
                     <p>Level: {{ pokemon.level }}</p>
                     <p>Type: {{ pokemon.type }}</p>
