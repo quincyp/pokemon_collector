@@ -10,6 +10,7 @@ from .forms import Pokemon_Form
 
 import pokebase as pb
 import requests
+import json
 
 from pokebase import cache
 cache.API_CACHE
@@ -50,18 +51,28 @@ def pokemon_index(request):
             pokemon.user = request.user
             pokemon.save()
             return redirect('pokemon_index')
-    # charmander = pb.pokemon('charmander')
+    # charmander = pb.pokemon('charmander').url
+    # print(charmander)
+    # http://pokeapi.co/api/v1/pokemon/4/
 
     pokemons = Pokemon.objects.all()
     # filter to only users's pokemon instead of all in db
     # pokemons = Pokemon.object.filter(user=request.user) 
     pokemon_img = {}
     for pokemon in pokemons:
-        # url = pb.pokemon(pokemon.name.lower())
-        # response = requests.get(url)
-        # if response.status_code == 200:
-        url = pb.pokemon(pokemon.name.lower()).sprites.other.dream_world.front_default
+        base_url = 'http://pokeapi.co/api/v1/pokemon/'
+        check_url = base_url + pokemon.name.lower()
+        response = requests.get(check_url)
+        # Checks if URL status is good to assign img url, if bad then default pokeball img url
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            print(data['name'])
+            url = pb.pokemon(pokemon.name.lower()).sprites.other.dream_world.front_default
+        else:
+            print('An error occured querying the API')
+            url = 'https://i.pinimg.com/originals/2b/46/73/2b4673e318ab94da17bbf9eaad5b80d6.png' # previously'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
         pokemon_img[pokemon.name] = url
+
         
 
 
