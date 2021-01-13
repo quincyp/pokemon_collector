@@ -46,9 +46,9 @@ def pokemon_index(request):
     if request.method == 'POST':
         pokemon_form = Pokemon_Form(request.POST)
         if pokemon_form.is_valid():
-            pokemon_form.save(commit=False)
-            pokemon_form.user = request.user
-            pokemon_form.save()
+            pokemon = pokemon_form.save(commit=False)
+            pokemon.user = request.user
+            pokemon.save()
             return redirect('pokemon_index')
     # charmander = pb.pokemon('charmander')
 
